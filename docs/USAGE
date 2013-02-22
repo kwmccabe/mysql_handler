@@ -1,0 +1,49 @@
+-------------------------------------------------
+Basic usage:
+
+<?php
+  require_once("mysql_handler/MySQLHandler.inc");
+  $DBH = new MySQLHandler();
+
+  $query_string = "SELECT * FROM table_name";
+  $DBH->setDBQuery( $query_string );
+  if (!$DBH->runQuery( $result, $terr ))
+    { echo $terr; }
+
+  echo "result: <pre>"; print_r($result); echo "</pre>\n";
+?>
+
+-------------------------------------------------
+MySQLHandler can be subclassed to create a handler specific to your project.
+This subclass can set/run queries directly, as in the above example, or
+it can use project specific subclasses of MySQLView to automatically generate 
+SQL statements and to fetch results from the database.
+
+<?php
+  require_once("my_project/db/ItemView.inc");
+  
+  class ItemDBHandler extends MySQLHandler {
+
+    function getItem( $params, &$result, &$err ) {
+      $view = new ItemView( array("dbhandler" => $this) );
+      if (!$view->selectView( "byID", $params, $result, $terr ))
+        { $err = get_class($this)."::getItem ERROR: $terr "; return false; }
+      return true;
+    }
+
+  }
+?>
+
+-------------------------------------------------
+This subclass of MySQLHandler would be used according the following pattern.
+
+<?php
+  require_once("my_project/db/ItemDBHandler.inc");
+  $HANDLER = new ItemDBHandler();
+
+  $params = array( "id" => 12345 );
+  if (!$HANDLER->getItem( $params, $item, $terr ))
+    { echo $terr; }
+
+  echo "item: <pre>"; print_r($item); echo "</pre>\n";
+?>

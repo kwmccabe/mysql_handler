@@ -1,0 +1,43 @@
+-------------------------------------------------
+-- Create tables for SimpleDBHandler & SimpleView
+-- simple_idx:  see SimpleDBHandler::getPrimaryKey()
+-- item:        see SimpleDBHandler::deleteItem() ; insertItem() ; updateItem()
+-------------------------------------------------
+
+CREATE TABLE simple_idx (
+	simple_item   decimal(10,0)    NOT NULL DEFAULT 1
+);
+
+CREATE TABLE simple_item (
+	ixItem        decimal(10,0)  NOT NULL
+	, sItem       varchar(63)    NOT NULL
+	, mod_create  datetime       NOT NULL
+	, mod_update  datetime       NOT NULL
+
+	, PRIMARY KEY(ixItem)
+	, INDEX item_sItem(sItem)
+);
+	
+
+
+-------------------------------------------------
+-- Create tables for multi-table view examples
+-- see SampleOneView, SampleTwoView, SampleThreeView
+-------------------------------------------------
+CREATE TABLE parent (
+	ixParent     decimal(10,0)  NOT NULL
+	, sParent    varchar(63)    NOT NULL
+
+	, PRIMARY KEY(ixParent)
+	, INDEX parent_sParent(sParent)
+);
+
+
+CREATE TABLE child (
+	ixChild     decimal(10,0)  NOT NULL
+	, sChild    varchar(63)    NOT NULL
+	, ixParent  decimal(10,0)  NOT NULL REFERENCES parent(ixParent)
+
+	, PRIMARY KEY(ixChild)
+	, INDEX child_sChild(sChild)
+);

@@ -1,0 +1,23 @@
+1) Create the following directories within your webserver's root:
+  lib
+  inc
+  data
+
+For instance, under MacOSX you would create "/Library/WebServer/lib", "/Library/WebServer/inc", and "/Library/WebServer/data".  Under Linux, these paths might start with "/var/www", or "/usr/local/htdocs" rather than "/Library/WebServer".
+
+
+2) Inside the new "lib" directory, create another directory called "mysql_handler".  Then, copy config.inc, MySQLHandler.inc, and MySQLView.inc into the lib/mysql_handler directory.
+
+
+3) Inside the new "inc" directory, create another directory called "mysql_handler".  Then copy config.inc into the inc/mysql_handler directory.
+
+
+4) Inside the new "data" directory, create another directory called "mysql_handler"
+
+
+5) Open the file inc/mysql_handler/config.inc for editing.  Update the values under "function MySQLHandlerConfig()" to match your setup.
+
+
+6) Update your php include_path.  Under MacOSX the default is .:/usr/local/php5/lib/php  This would be changed to .:/Library/WebServer/inc:/Library/WebServer/lib:/usr/local/php5/lib/php, inserting the new "inc" and "lib" directories created above.  This means that PHP will first look in local directory (.), then the "inc" directory, then the "lib" directory, and finally in the standard php lib directory.
+
+7) Restart Apache and confirm that the "include_path" is correct.  You can do this by creating a file called "info.php", containing "<?php phpinfo(); ?>".  Opened in a browser this page displays the details of you PHP configuration.

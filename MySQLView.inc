@@ -98,7 +98,7 @@ require_once("mysql_handler/config.inc");
  */
 class MySQLView {
 	/**
-	 * @var resource returned by MySQLHandler::openConnection()
+	 * @var object MySQLHandler
 	 */
 	public $dbhandler;
 
@@ -129,15 +129,13 @@ class MySQLView {
 
 	/**
 	 * Called after subclass initialization
-	 *
-	 * Param 'dbhandler' is required : connection resource from MySQLHandler
 	 */
 	public function MySQLView( $params = array() ) {
 //echo "<b>".__METHOD__."</b>(<pre>".print_r($params,true)."</pre>)\n";
 
 		$this->dbhandler = (!empty($params['dbhandler'])) ? $params['dbhandler'] : new MySQLHandler();
 		if (!is_object($this->dbhandler))
-			{ die("MySQLView ERROR: invalid member 'dbhandler' <br>\n"); }
+			{ die("MySQLView ERROR: invalid member object 'dbhandler' <br>\n"); }
 
 		if (!is_array($this->tables))
 			{ die("MySQLView ERROR: Missing member array 'tables' <br/>\n"); }
@@ -676,7 +674,16 @@ class MySQLView {
 				{ $path = $this->dbhandler->config->export_path . $path; }
 
 			$fh = fopen($path,'wb');
+			if (!is_resource($fh))
+				{ $err = __METHOD__." ERROR: fopen('".$path."','wb') failed "; return false; }
+
 			$bytes = fwrite($fh,$rv);
+			if ($bytes != strlen($rv))
+				{ $err = __METHOD__." ERROR: $bytes bytes written, ".strlen($rv)." bytes expected to '".$path."' "; @fclose($fh); return false; }
+
+			if (!@fclose($fh))
+				{ $err = __METHOD__." ERROR: fclose '".$path."' failed "; return false; }
+
 			$rv = "$path ($bytes bytes)";
 		}
 
@@ -1350,7 +1357,7 @@ class MySQLView {
 	protected function getFieldName( $tblinfo, $dbname ) {
 //echo "<b>".__METHOD__."</b>($tblinfo,$dbname)<br/>\n";
 
-		$result = "";
+		$result = '';
 		while (list($fldname,$dbinfo) = each($this->tableinfo[$tblinfo]['map'])) {
 			$curname = $dbinfo;
 			if (is_array($dbinfo))
@@ -1402,6 +1409,6 @@ class MySQLView {
 		return $result;               // return content
 	}
 
-}
+}  // end class MySQLView
 
 </script>

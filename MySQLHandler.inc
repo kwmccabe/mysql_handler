@@ -59,9 +59,11 @@ class MySQLHandler {
 
 	/**
 	 * @param array $params override config values
+	 * - string dbquery
 	 * - string dbhost
 	 * - string dbname
 	 * - string dbuser
+	 * - string dbpass
 	 * - bool close_connections
 	 * - bool load_data_local
 	 * - string export_path
@@ -71,7 +73,7 @@ class MySQLHandler {
 		$this->config = new MySQLHandlerConfig();
 
 		$this->dbhandle = null;
-		$this->dbquery = "";
+		$this->dbquery = (!empty($params['dbquery'])) ? $params['dbquery'] : "";
 
 		while (list($key,$val) = each($params)) {
 			// override member values
@@ -97,7 +99,7 @@ class MySQLHandler {
 		$this->databases_query = "SHOW DATABASES";  // constant, see listDatabases
 		$this->databases_result = "Database";       // constant, see listDatabases
 
-		$this->tables_query = "SHOW TABLES FROM ";  // constant, see listTables
+		$this->tables_query = "SHOW TABLES FROM";   // constant, see listTables
 		$this->tables_result = "Tables_in_";        // constant, see listTables
 
 //		$this->openConnection();
@@ -124,6 +126,7 @@ class MySQLHandler {
 	 */
 	public function openConnection( $params = array() ) {
 //echo "<b>".__METHOD__."</b>(<pre>".print_r($params,true)."</pre>)<br/>\n";
+//		if (is_resource($this->dbhandle)) { return true; }
 
 		if (!empty($params['dbhost'])) { $this->config->dbhost = $params['dbhost']; }
 		if (!empty($params['dbname'])) { $this->config->dbname = $params['dbname']; }
@@ -223,8 +226,11 @@ class MySQLHandler {
 			if (!mysql_free_result($dbresult))
 				{ $err = __METHOD__." ERROR: could not free result"; return false; }
 
-		} else if (!(strpos(strtoupper($this->dbquery),"INSERT ") === false)
-				|| !(strpos(strtoupper($this->dbquery),"UPDATE ") === false)
+		} else if (!(strpos(strtoupper($this->dbquery),"INSERT ") === false)) {
+			$result = array(
+				"insert_id" => mysql_insert_id($this->dbhandle)
+				);
+		} else if (!(strpos(strtoupper($this->dbquery),"UPDATE ") === false)
 				|| !(strpos(strtoupper($this->dbquery),"DELETE ") === false)
 				|| !(strpos(strtoupper($this->dbquery),"LOAD DATA ") === false)
 		) {
@@ -297,7 +303,7 @@ class MySQLHandler {
 		$result = array();
 		$err = '';
 
-		$this->setDBQuery($this->tables_query . $this->config->dbname);
+		$this->setDBQuery($this->tables_query . " " . $this->config->dbname);
 		if (!$this->runQuery( $data, $terr ))
 			{ $err = __METHOD__." ERROR: $terr"; return false; }
 
@@ -370,6 +376,6 @@ class MySQLHandler {
 		return $result;               // return content
 	}
 
-}
+}  // end class MySQLHandler
 
 </script>

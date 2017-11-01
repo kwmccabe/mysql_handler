@@ -1,7 +1,7 @@
-<script language="php">
+<?php
 /**
  * @package mysql_handler
- * @copyright Copyright © 2001-2013 Ten&Two Systems. All Rights Reserved.
+ * @copyright Copyright © 2001-2017 Ten&Two Systems. All Rights Reserved.
  */
 
 /**
@@ -378,4 +378,3 @@ class MySQLHandler {
 
 }  // end class MySQLHandler
 
-</script>

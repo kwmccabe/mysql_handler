@@ -1,8 +1,8 @@
-<script language="php">
+<?php
 /**
  * @package mysql_handler
  * @subpackage samples
- * @copyright Copyright © 2001-2013 Ten&Two Systems. All Rights Reserved.
+ * @copyright Copyright © 2001-2017 Ten&Two Systems. All Rights Reserved.
  */
 
 /**
@@ -18,7 +18,8 @@ require_once("mysql_handler/MySQLHandler.inc");
  * @package mysql_handler
  * @subpackage samples
  */
-class SimpleDBHandler extends MySQLHandler {
+class SimpleDBHandler extends MySQLHandler
+{
 	/*
 	 * @var array MySQLView array
 	 */
@@ -259,5 +260,4 @@ class SimpleDBHandler extends MySQLHandler {
 		return true;
 	}
 
-}
-</script>
+}  // end class SimpleDBHandler

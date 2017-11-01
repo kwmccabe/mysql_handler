@@ -1,7 +1,7 @@
-<script language="php">
+<?php
 /**
  * @package mysql_handler
- * @copyright Copyright © 2001-2013 Ten&Two Systems. All Rights Reserved.
+ * @copyright Copyright © 2001-2017 Ten&Two Systems. All Rights Reserved.
  *
  * command-line equivalent:
  * mysql --host={dbhost} --database={dbname} --user={dbuser} --pass={dbpass}
@@ -86,6 +86,5 @@ class MySQLHandlerConfig {
 		$this->load_data_local   = false;
 		$this->export_path       = "/var/data/mysql/";  // with trailing '/'
 	}
-}
 
-</script>
+}  // end class MySQLHandlerConfig

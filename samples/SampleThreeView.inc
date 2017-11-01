@@ -1,8 +1,8 @@
-<script language="php">
+<?php
 /**
  * @package mysql_handler
  * @subpackage samples
- * @copyright Copyright © 2001-2013 Ten&Two Systems. All Rights Reserved.
+ * @copyright Copyright © 2001-2017 Ten&Two Systems. All Rights Reserved.
  */
 
 /**
@@ -16,7 +16,8 @@ require_once("mysql_handler/MySQLView.inc");
  * @package mysql_handler
  * @subpackage samples
  */
-class SampleThreeView extends MySQLView {
+class SampleThreeView extends MySQLView
+{
 
 	/**
 	 * Config arrays: tables, update, select, tableinfo
@@ -82,6 +83,4 @@ class SampleThreeView extends MySQLView {
 		$this->MySQLView($params);
 	}
 
-}
-
-</script>
+}  // end class SampleThreeView
